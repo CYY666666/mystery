@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL = process.env.NODE_ENV === 'preduction' ? '' : 'http://localhost:5000/api'
+const baseURL = process.env.VUE_APP_BASE_API
 
 axios.interceptors.request.use(config => {
   if (localStorage.token) {
