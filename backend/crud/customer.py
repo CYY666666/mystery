@@ -1,0 +1,38 @@
+from typing import List, Any
+from sqlalchemy.orm import Session
+
+from crud.base import CRUDBase
+from model import SessionLocal
+from model.customer import Customer
+
+
+class CRUDCustomer(CRUDBase):
+    def add_got_mark(self, db: Session, id: int):
+        db_obj: Customer = self.get(db, id)
+        db_obj.got_mark += 1
+        db.commit()
+        db.refresh(db_obj)
+        return True
+
+    def minus_got_mark(self, db: Session, id: int):
+        db_obj: Customer = self.get(db, id)
+        db_obj.got_mark -= 1
+        db.commit()
+        db.refresh(db_obj)
+        return True
+
+    def get_got_mark(self, db: Session, id: int) -> int:
+        db_obj: Customer = self.get(db, id)
+        return db_obj.got_mark
+
+    def get_by_url(self, db: Session, url: str):
+        return db.query(self.model).filter(self.model.url == url).first()
+
+
+customer_crud = CRUDCustomer(Customer)
+
+
+if __name__ == '__main__':
+    # a: Answer = answer.get_answer_by_question_subject_id(SessionLocal(), '台湾问题的核心是', 7)
+    # print(a.choose)
+    pass

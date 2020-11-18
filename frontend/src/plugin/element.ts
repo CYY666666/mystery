@@ -1,0 +1,114 @@
+import Vue from 'vue'
+import {
+  Alert,
+  CheckboxButton,
+  CheckboxGroup,
+  Button,
+  Form,
+  Image,
+  FormItem,
+  Input,
+  Message,
+  MessageBox,
+  Container,
+  Header,
+  Footer,
+  Aside,
+  Main,
+  Badge,
+  Menu,
+  MenuItem,
+  MenuItemGroup,
+  Submenu,
+  Breadcrumb,
+  BreadcrumbItem,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Select,
+  Option,
+  Table,
+  TableColumn,
+  Dialog,
+  Link,
+  Checkbox,
+  DatePicker,
+  Progress,
+  Steps,
+  Step,
+  RadioGroup,
+  Radio,
+  RadioButton,
+  InputNumber,
+  Upload,
+  Pagination,
+  Col,
+  Row,
+  Card,
+  Tooltip,
+  Tag,
+  Loading,
+  Switch,
+  Tabs,
+  TabPane,
+  Tree,
+  Backtop,
+  Icon
+} from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+Vue.use(Tag)
+Vue.use(Button)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Input)
+Vue.use(Container)
+Vue.use(Header)
+Vue.use(Footer)
+Vue.use(Aside)
+Vue.use(Main)
+Vue.use(Badge)
+Vue.use(Menu)
+Vue.use(MenuItem)
+Vue.use(MenuItemGroup)
+Vue.use(Submenu)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Dialog)
+Vue.use(Link)
+Vue.use(Checkbox)
+Vue.use(DatePicker)
+Vue.use(Progress)
+Vue.use(Steps)
+Vue.use(Step)
+Vue.use(RadioGroup)
+Vue.use(RadioButton)
+Vue.use(Radio)
+Vue.use(InputNumber)
+Vue.use(Upload)
+Vue.use(CheckboxGroup)
+Vue.use(CheckboxButton)
+Vue.use(Image)
+Vue.use(Pagination)
+Vue.use(Col)
+Vue.use(Row)
+Vue.use(Card)
+Vue.use(Tooltip)
+Vue.use(Alert)
+Vue.use(Loading)
+Vue.use(Switch)
+Vue.use(Tabs)
+Vue.use(TabPane)
+Vue.use(Tree)
+Vue.use(Backtop)
+Vue.use(Icon)
+
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message
