@@ -3,7 +3,6 @@ FROM node:lts-stretch-slim as builder
 RUN mkdir /qmyz-frontend
 WORKDIR /qmyz-frontend
 
-RUN npm config set registry https://registry.npm.taobao.org
 RUN npm install vue -g
 COPY package.json /qmyz-frontend
 RUN npm install
