@@ -2,9 +2,15 @@
 <template>
   <div>
     <el-button type="primary" style="float:left" @click="addCustomer">添加<i class="el-icon-circle-plus-outline"></i></el-button>
+    <el-button type="primary" style="float:left" @click="continueTask">继续<i class="el-icon-circle-plus-outline"></i></el-button>
     <el-table
       :data="customerList"
-      style="width: 100%">
+      style="width: 100%"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column
         prop="remark"
         label="昵称">
@@ -57,7 +63,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import MenuAside from '../components/menu.vue'
 import pagination from '../components/pagination.vue'
-import { getAllCustomer } from '../api/http/customerApi'
+import { getAllCustomer, restartTask } from '../api/http/customerApi'
 import { getInfo } from '../api/http/infoApi'
 import DialogCustomerAdd from '@/components/dialogs/customer-add.vue'
 import dayjs from 'dayjs'
@@ -78,6 +84,7 @@ export default class Customer extends Vue {
   change = null
   subjectInfo = {}
   timer: any = null
+  multipleSelection = []
 
   @Watch('currentPage')
   @Watch('change')
@@ -117,6 +124,29 @@ export default class Customer extends Vue {
     this.$store.commit('dialogs/ADD_CUSTOMER', lst)
   }
 
+  async continueTask () {
+    const customerIdList = []
+    for (const i of this.multipleSelection) {
+      customerIdList.push((i as any).id)
+    }
+    // eslint-disable-next-line quote-props
+    const res = await restartTask({ 'customer_id_list': customerIdList })
+    if ((res as any).status === 200) {
+      this.$message({
+        message: '成功',
+        type: 'success'
+      })
+    } else {
+      this.$message.error({
+        message: '失败'
+      })
+    }
+  }
+
+  handleSelectionChange (val: any) {
+    this.multipleSelection = val
+  }
+
   async getSubjectInfo () {
     const res = await getInfo()
     this.subjectInfo = (res as any).data
@@ -125,7 +155,7 @@ export default class Customer extends Vue {
   async intervalGetData () {
     this.timer = setInterval(async () => {
       await this.getAllCustomerData()
-    }, 1000 * 5)
+    }, 1000 * 12)
   }
 
   copyUrl (url: string) {

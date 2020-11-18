@@ -41,15 +41,16 @@ def create_customer(db):
         abort(400)
 
 
-@customer_api.route('', methods=['POST'])
+@customer_api.route('/restart_task', methods=['POST'])
 @get_db
 def restart_task(db):
     data = request.get_data(as_text=True)
     try:
         json_data = json.loads(data)
-        customer_id = json_data.get('customer_id')
+        customer_id_list = json_data.get('customer_id_list')
         from celery_core.crawler import crawler
-        crawler.delay(customer_id)
+        for customer_id in customer_id_list:
+            crawler.delay(customer_id)
 
         return '成功'
     except Exception as e:
