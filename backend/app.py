@@ -9,8 +9,8 @@ from celery_core.celery_app import make_celery
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, resources={r"*": {"origins": "*"}})
-app.register_blueprint(customer_api, url_prefix='/customer')
-app.register_blueprint(info_api, url_prefix='/info')
+app.register_blueprint(customer_api, url_prefix='/api/customer')
+app.register_blueprint(info_api, url_prefix='/api/info')
 celery = make_celery(app)
 
 
