@@ -7,13 +7,13 @@
     width="55%">
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-ruleForm">
   <el-form-item label="正确率" prop="accuracy" required>
-    <el-input v-model="form.accuracy"></el-input>
+    <el-input v-model.number="form.accuracy"></el-input>
   </el-form-item>
   <el-form-item label="昵称" prop="remark">
     <el-input v-model="form.remark"></el-input>
   </el-form-item>
   <el-form-item label="总分" prop="total_mark" required>
-    <el-input v-model="form.total_mark"></el-input>
+    <el-input v-model.number="form.total_mark"></el-input>
   </el-form-item>
   <el-form-item label="url" prop="url" required>
     <el-input v-model="form.url" type="textarea"></el-input>
