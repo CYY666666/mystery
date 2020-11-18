@@ -125,6 +125,12 @@ export default class Customer extends Vue {
   }
 
   async continueTask () {
+    if (!this.multipleSelection.length) {
+      this.$message.warning({
+        message: '未选中'
+      })
+      return
+    }
     const customerIdList = []
     for (const i of this.multipleSelection) {
       customerIdList.push((i as any).id)
