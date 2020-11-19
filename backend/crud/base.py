@@ -25,9 +25,9 @@ class CRUDBase:
     def get_multi(
         self, db: Session, skip: int = 0, limit: int = 100
     ) -> Any:
-        lst = db.query(self.model).offset(skip).limit(limit).order_by(
+        lst = db.query(self.model).order_by(
             self.model.create_at.desc()
-        ).all()
+        ).offset(skip).limit(limit).all()
         return json.dumps(lst, cls=AlchemyEncoder)
 
     def create(self, db: Session, obj_in: dict) -> Any:

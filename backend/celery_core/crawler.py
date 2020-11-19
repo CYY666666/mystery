@@ -8,11 +8,11 @@ import json
 from app import celery
 from crud import customer_crud, answer_crud
 from model.customer import Customer
-from utils.decorator import get_db
+from utils.decorator import get_db, get_db_celery
 
 
 @celery.task()
-@get_db
+@get_db_celery
 def crawler(db, customer_id: int):
     with celery.app.app_context():
         customer = customer_crud.get(db, customer_id)
