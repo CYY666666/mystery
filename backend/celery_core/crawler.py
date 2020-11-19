@@ -14,6 +14,8 @@ from utils.decorator import get_db, get_db_celery
 @celery.task()
 @get_db_celery
 def crawler(db, customer_id: int):
+    p = r'(?<="rightOption":")\w+'  # 匹配answer
+    pattern = re.compile(p)
     with celery.app.app_context():
         customer = customer_crud.get(db, customer_id)
         url = customer.url
@@ -54,10 +56,6 @@ def crawler(db, customer_id: int):
             'X-Requested-With': 'XMLHttpRequest',
             'Accept-Language': 'zh-CN,zh;q=0.9'
         }
-        p1 = r'(?<="uuid":").+(?="},"isSuccess)'  # 匹配uuid
-        p2 = r'(?<="rightOption":").'  # 匹配answer
-        p3 = r'(?<="message":").+(?=！")'  # 匹配是否正确
-        p4 = r'(?<="subDescript":").+(?=","subType":")'  # 匹配问题文本
         question_url = 'http://qm.linyisong.top/yiban-web/stu/nextSubject.jhtml?_=1549905749917'
         choice_url = 'http://qm.linyisong.top/yiban-web/stu/changeSituation.jhtml?_=1545318034464'
 
@@ -66,13 +64,9 @@ def crawler(db, customer_id: int):
         try:
             while got_mark < total_mark:
                 response = requests.post(url=question_url, data={'courseId': subject_id}, headers=headers)
-                key = response.text
-                pattern1 = re.compile(p1)
-                matcher1 = re.search(pattern1, key)
-                uuid = matcher1.group(0)
-                pattern4 = re.compile(p4)
-                matcher4 = re.search(pattern4, key)
-                question = matcher4.group(0)
+                question_json = response.json()
+                uuid = question_json.get('data', {}).get('uuid', '')
+                question = question_json.get('data', {}).get('nextSubject', {}).get('subDescript', '')
                 answer = answer_crud.get_answer_by_question_subject_id(db, question, subject_id)
                 if answer:
                     choice = answer.choice
@@ -84,21 +78,20 @@ def crawler(db, customer_id: int):
                                           data={'answer': choice, 'courseId': subject_id, 'uuid': uuid},
                                           headers=headers)
 
-                key2 = response2.text
-                pattern3 = re.compile(p3)
-                matcher3 = re.search(pattern3, key2)
-                is_true = matcher3.group(0)
+                answer_json = response2.json()
+                is_true = answer_json.get('data', {}).get('rightAnswer', None)
 
-                if is_true == '回答正确':
+                if is_true:
                     true_choice = choice
                     now_ += 1
                     customer_crud.add_got_mark(db, customer_id)
                     print('回答正确')
                 else:
-                    pattern2 = re.compile(p2)
-                    matcher2 = re.search(pattern2, key2)
+                    right_option = answer_json.get('data', {}).get('rightOption', '')
+                    matcher2 = re.search(pattern, right_option)
                     true_choice = matcher2.group(0)
                     customer_crud.minus_got_mark(db, customer_id)
+                    print(true_choice)
                     print('回答错误')
                 data = {
                     'question': question,
