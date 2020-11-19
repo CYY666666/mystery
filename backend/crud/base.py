@@ -3,6 +3,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from sqlalchemy.orm import Session
 
+from model.base import BaseModel
 from utils.json_encoder import AlchemyEncoder
 
 
@@ -16,7 +17,7 @@ class CRUDBase:
         * `model`: A SQLAlchemy model class
         * `schema`: A Pydantic model (schema) class
         """
-        self.model = model
+        self.model: BaseModel = model
 
     def get(self, db: Session, id: int) -> Any:
         return db.query(self.model).filter(self.model.id == id).first()
@@ -24,7 +25,9 @@ class CRUDBase:
     def get_multi(
         self, db: Session, skip: int = 0, limit: int = 100
     ) -> Any:
-        lst = db.query(self.model).offset(skip).limit(limit).all()
+        lst = db.query(self.model).offset(skip).limit(limit).order_by(
+            self.model.create_at.desc()
+        ).all()
         return json.dumps(lst, cls=AlchemyEncoder)
 
     def create(self, db: Session, obj_in: dict) -> Any:
