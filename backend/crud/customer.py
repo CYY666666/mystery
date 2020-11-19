@@ -30,9 +30,3 @@ class CRUDCustomer(CRUDBase):
 
 
 customer_crud = CRUDCustomer(Customer)
-
-
-if __name__ == '__main__':
-    # a: Answer = answer.get_answer_by_question_subject_id(SessionLocal(), '台湾问题的核心是', 7)
-    # print(a.choose)
-    pass

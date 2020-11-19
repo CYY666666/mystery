@@ -85,15 +85,11 @@ def crawler(db, customer_id: int):
                     true_choice = choice
                     now_ += 1
                     customer_crud.add_got_mark(db, customer_id)
-                    print('回答正确')
                 else:
                     right_option = answer_json.get('data', {}).get('rightOption', '')
-                    print(right_option)
                     matcher2 = re.search(pattern, right_option)
                     true_choice = matcher2.group(0)
                     customer_crud.minus_got_mark(db, customer_id)
-                    print(true_choice)
-                    print('回答错误')
                 data = {
                     'question': question,
                     'choice': true_choice,
@@ -101,8 +97,6 @@ def crawler(db, customer_id: int):
                 }
                 answer_crud.create_if_not_exist(db, data)
                 got_mark = customer.got_mark
-                print(got_mark)
-
                 total_tmp += 1
                 time.sleep(6)
 
