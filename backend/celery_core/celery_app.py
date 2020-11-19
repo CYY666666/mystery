@@ -17,4 +17,5 @@ def make_celery(app):
                 return self.run(*args, **kwargs)
 
     celery.Task = ContextTask
+    celery.app = app
     return celery
