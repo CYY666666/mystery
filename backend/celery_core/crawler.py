@@ -14,7 +14,7 @@ from utils.decorator import get_db, get_db_celery
 @celery.task()
 @get_db_celery
 def crawler(db, customer_id: int):
-    p = r'(?<="rightOption":")\w+'  # 匹配answer
+    p = r'\w+'  # 匹配answer
     pattern = re.compile(p)
     with celery.app.app_context():
         customer = customer_crud.get(db, customer_id)
@@ -88,6 +88,7 @@ def crawler(db, customer_id: int):
                     print('回答正确')
                 else:
                     right_option = answer_json.get('data', {}).get('rightOption', '')
+                    print(right_option)
                     matcher2 = re.search(pattern, right_option)
                     true_choice = matcher2.group(0)
                     customer_crud.minus_got_mark(db, customer_id)
