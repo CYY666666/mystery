@@ -65,8 +65,6 @@ def crawler(db, customer_id: int):
         now_ = 0
         try:
             while got_mark < total_mark:
-                got_mark = customer.got_mark
-                print(got_mark)
                 response = requests.post(url=question_url, data={'courseId': subject_id}, headers=headers)
                 key = response.text
                 pattern1 = re.compile(p1)
@@ -108,6 +106,8 @@ def crawler(db, customer_id: int):
                     'subject_id': subject_id
                 }
                 answer_crud.create_if_not_exist(db, data)
+                got_mark = customer.got_mark
+                print(got_mark)
 
                 total_tmp += 1
                 time.sleep(6)
