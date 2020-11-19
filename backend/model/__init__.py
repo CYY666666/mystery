@@ -13,12 +13,9 @@ def connect(user, password, db, host=DB_URL, port=DB_PORT):
     url = url.format(user, password, host, port, db)
 
     # The return value of create_engine() is our connection object
-    engine = sqlalchemy.create_engine(url, client_encoding='utf8', pool_size=30, pool_pre_ping=True)
+    engine = sqlalchemy.create_engine(url, client_encoding='utf8', pool_size=10, pool_pre_ping=True)
 
-    # We then bind the connection to MetaData()
-    meta = sqlalchemy.MetaData(bind=engine)
-
-    return engine, meta
+    return engine
 
 
 class MySession(Session):
@@ -52,6 +49,6 @@ class MySessionMaker(sessionmaker):
         self.class_ = type(class_.__name__, (class_,), {})
 
 
-engine, meta = connect(DB_USER, DB_PASSWORD, DB)
+engine = connect(DB_USER, DB_PASSWORD, DB)
 Base = declarative_base()
 SessionLocal = MySessionMaker(autocommit=False, autoflush=False, bind=engine)
