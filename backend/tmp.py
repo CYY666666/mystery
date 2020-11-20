@@ -5,7 +5,7 @@ from model import SessionLocal
 
 conn = sqlite3.connect('qmyz1.db')
 cursor = conn.cursor()
-subject_id = 10
+subject_id = 9
 
 db = SessionLocal()
 cursor.execute('SELECT * FROM id{}'.format(subject_id))
@@ -16,6 +16,6 @@ for it in results:
         'choice': it[1],
         'subject_id': subject_id
     }
-    answer_crud.create_if_not_exist(db, dict_)
+    answer_crud.create_or_update(db, dict_)
 
 db.close()

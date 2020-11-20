@@ -26,7 +26,7 @@ def create_customer(db):
         if json_data.get('got_mark', 0) < 0:
             json_data['got_mark'] = 0
         json_data['subject_name'] = get_subject_info(json_data.get('subject_id', 0))
-        if not customer_crud.get_by_url(db, json_data.get('url', '')):
+        if not customer_crud.get_by_url_subject_id(db, json_data.get('url', ''), json_data.get('subject_id')):
             custom: Customer = customer_crud.create(db, json_data)
             from celery_core.crawler import crawler
             crawler.delay(custom.id)
