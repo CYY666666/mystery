@@ -87,18 +87,20 @@ def crawler(db, customer_id: int):
                     customer_crud.add_got_mark(db, customer_id)
                 else:
                     right_option = answer_json.get('data', {}).get('rightOption', '')
-                    matcher2 = re.search(pattern, right_option)
-                    true_choice = matcher2.group(0)
+                    true_choice_list = re.findall(pattern, right_option)
+                    true_choice_list = list(set(true_choice_list))
+                    true_choice_list.sort()
+                    true_choice = ''.join(true_choice_list)
                     customer_crud.minus_got_mark(db, customer_id)
                 data = {
                     'question': question,
                     'choice': true_choice,
                     'subject_id': subject_id
                 }
-                answer_crud.create_if_not_exist(db, data)
+                answer_crud.create_or_update(db, data)
                 got_mark = customer.got_mark
                 total_tmp += 1
-                time.sleep(6)
+                time.sleep(8)
 
         except Exception as e:
             traceback.print_exc()

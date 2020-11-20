@@ -17,14 +17,19 @@ class CRUDAnswer(CRUDBase):
             .first()
         )
 
-    def create_if_not_exist(self, db: Session, obj_in: dict):
+    def create_or_update(self, db: Session, obj_in: dict):
         question = obj_in.get('question')
         subject_id = obj_in.get('subject_id')
-        if not self.get_answer_by_question_subject_id(db, question, subject_id):
+        answer = self.get_answer_by_question_subject_id(db, question, subject_id)
+        if not answer:
             db_obj = self.model(**obj_in)
             db.add(db_obj)
             db.commit()
             db.refresh(db_obj)
+        else:
+            answer.choice = obj_in.get('choice')
+            db.commit()
+            db.refresh(answer)
         return
 
 
