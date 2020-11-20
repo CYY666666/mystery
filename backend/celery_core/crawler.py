@@ -14,7 +14,7 @@ from utils.decorator import get_db, get_db_celery
 @celery.task()
 @get_db_celery
 def crawler(db, customer_id: int):
-    p = r'\w+'  # 匹配answer
+    p = r'[A-F]'  # 匹配answer
     pattern = re.compile(p)
     with celery.app.app_context():
         customer = customer_crud.get(db, customer_id)
