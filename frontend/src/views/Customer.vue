@@ -36,6 +36,10 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="accuracy"
+        label="正确率">
+      </el-table-column>
+      <el-table-column
         label="url">
         <template v-slot="{row}">
           <el-tooltip placement="top" effect="light" v-if="row.url">

@@ -5,10 +5,22 @@ from sqlalchemy.orm import Session
 from crud.base import CRUDBase
 from model import SessionLocal
 from model.users import User
-from utils.security import gen_password_and_salt, verify_password
+from utils.security import gen_password_and_salt, verify_password, get_password_hash
 
 
 class CRUDAnswer(CRUDBase):
+    def create(self, db: Session, obj_in: dict) -> User:
+        db_obj = User(
+            username=obj_in.get('username'),
+            password=bytes(get_password_hash(obj_in.get('password')), encoding='utf-8'),
+            remark=obj_in.get('remark'),
+            state=obj_in.get('state'),
+        )
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
     def get_by_username(self, db: Session, username: str):
         return db.query(self.model).filter(self.model.username == username).first()
 
@@ -16,11 +28,15 @@ class CRUDAnswer(CRUDBase):
         user = self.get_by_username(db, username)
         if not user:
             return None
-        if not verify_password(password, user.hashed_password):
+        if not verify_password(password, user.password):
             return None
-        user.last_login_time = int(time.time())
-        user.save()
+        user.last_login = int(time.time())
+        db.commit()
+        db.refresh(user)
         return user
+
+    def is_active(self, user: User) -> bool:
+        return user.state == 50
 
 
 user_crud = CRUDAnswer(User)
@@ -29,8 +45,10 @@ user_crud = CRUDAnswer(User)
 if __name__ == '__main__':
     dict_ = {
         'username': 'root',
-        'remark': 'root'
+        'remark': 'root',
+        'password': '123456',
+        'state': 50
     }
-    info = gen_password_and_salt('666666')
-    dict_.update(info)
-    a: User = user_crud.create(SessionLocal(), dict_)
+    # a: User = user_crud.create(SessionLocal(), dict_)
+    a: User = user_crud.authenticate(SessionLocal(), 'root', '123456')
+    print(a.password)
