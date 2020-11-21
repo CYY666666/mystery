@@ -81,6 +81,7 @@ def crawler(db, customer_id: int):
                 answer_json = response2.json()
                 is_true = answer_json.get('data', {}).get('rightAnswer', None)
                 if is_true is None:
+                    print(answer_json)
                     time.sleep(30)
                     continue
                 if is_true:
