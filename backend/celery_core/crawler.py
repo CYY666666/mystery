@@ -80,7 +80,9 @@ def crawler(db, customer_id: int):
 
                 answer_json = response2.json()
                 is_true = answer_json.get('data', {}).get('rightAnswer', None)
-
+                if is_true is None:
+                    time.sleep(30)
+                    continue
                 if is_true:
                     true_choice = choice
                     now_ += 1
@@ -97,7 +99,8 @@ def crawler(db, customer_id: int):
                     'choice': true_choice,
                     'subject_id': subject_id
                 }
-                answer_crud.create_or_update(db, data)
+                if true_choice != '':
+                    answer_crud.create_or_update(db, data)
                 got_mark = customer.got_mark
                 total_tmp += 1
                 time.sleep(8)
