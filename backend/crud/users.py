@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from crud.base import CRUDBase
 from model import SessionLocal
 from model.users import User
-from utils.security import gen_password_and_salt
+from utils.security import gen_password_and_salt, verify_password
 
 
 class CRUDAnswer(CRUDBase):
