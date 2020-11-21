@@ -42,11 +42,19 @@ class CRUDAnswer(CRUDBase):
     def is_superuser(self, user: User) -> bool:
         return user.is_superuser
 
+    def reset_password(self, db, user_id: int, password: str):
+        user: User = self.get(db, user_id)
+        user.password = bytes(get_password_hash(password), encoding='utf-8')
+        db.commit()
+        db.refresh(user)
+        return user
+
 
 user_crud = CRUDAnswer(User)
 
 
 if __name__ == '__main__':
+    dict_ = {}
     a: User = user_crud.create(SessionLocal(), dict_)
     # a: User = user_crud.authenticate(SessionLocal(), 'root', '123456')
     # print(a.password)

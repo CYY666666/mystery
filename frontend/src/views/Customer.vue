@@ -2,7 +2,8 @@
 <template>
   <div>
     <el-button type="primary" style="float:left" @click="addCustomer">添加<i class="el-icon-circle-plus-outline"></i></el-button>
-    <el-button type="primary" style="float:left" @click="continueTask">继续<i class="el-icon-circle-plus-outline"></i></el-button>
+    <el-button type="primary" style="float:left" @click="continueTask">继续<i class="el-icon-arrow-right"></i></el-button>
+    <el-button type="primary" style="float:right" @click="resetPassword">修改密码<i class="el-icon-setting"></i></el-button>
     <el-table
       :data="customerList"
       style="width: 100%"
@@ -59,6 +60,7 @@
       :total=totalPage>
     </el-pagination>
     <dialog-customer-add @added="added"/>
+    <dialog-password-reset />
   </div>
 </template>
 
@@ -70,13 +72,15 @@ import pagination from '../components/pagination.vue'
 import { getAllCustomer, restartTask } from '../api/http/customerApi'
 import { getInfo } from '../api/http/infoApi'
 import DialogCustomerAdd from '@/components/dialogs/customer-add.vue'
+import DialogPasswordReset from '@/components/dialogs/reset-password.vue'
 import dayjs from 'dayjs'
 
 @Component({
   components: {
     MenuAside,
     pagination,
-    DialogCustomerAdd
+    DialogCustomerAdd,
+    DialogPasswordReset
   }
 })
 export default class Customer extends Vue {
@@ -130,6 +134,10 @@ export default class Customer extends Vue {
       })
     }
     this.$store.commit('dialogs/ADD_CUSTOMER', lst)
+  }
+
+  resetPassword () {
+    this.$store.commit('dialogs/RESET_PASSWORD', true)
   }
 
   async continueTask () {

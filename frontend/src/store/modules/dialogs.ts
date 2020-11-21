@@ -6,11 +6,16 @@ Vue.use(Vuex)
 
 export interface StateDialogs {
   customerAdd: any;
+  passwordReset: any;
 }
 
 const mutations: MutationTree<StateDialogs> = {
   ADD_CUSTOMER (state, payload) {
     state.customerAdd = payload
+  },
+
+  RESET_PASSWORD (state, payload) {
+    state.passwordReset = payload
   }
 }
 
@@ -21,7 +26,8 @@ const actions: ActionTree<StateDialogs, StateIndex> = {
 export default {
   namespaced: true,
   state: {
-    customerAdd: null
+    customerAdd: null,
+    passwordReset: null
   } as StateDialogs,
   mutations,
   actions
