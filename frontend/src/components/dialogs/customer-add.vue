@@ -19,16 +19,14 @@
         <el-input v-model="form.url" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="科目" required>
-        <el-radio-group v-model="form.subject_id">
-          <el-radio
+        <el-select v-model="form.subject_id" placeholder="请选择">
+          <el-option
             v-for="subject in subjects"
-            :label="subject.id"
             :key="subject.id"
-            :value="subject.id"
-            style="width: 300px;">
-            {{ subject.name }}
-          </el-radio>
-        </el-radio-group>
+            :label="subject.name"
+            :value="subject.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('form')" :disabled="lodding">立即创建</el-button>
