@@ -15,6 +15,7 @@ class CRUDAnswer(CRUDBase):
             password=bytes(get_password_hash(obj_in.get('password')), encoding='utf-8'),
             remark=obj_in.get('remark'),
             state=obj_in.get('state'),
+            is_superuser=obj_in.get('is_superuser'),
         )
         db.add(db_obj)
         db.commit()
@@ -38,17 +39,14 @@ class CRUDAnswer(CRUDBase):
     def is_active(self, user: User) -> bool:
         return user.state == 50
 
+    def is_superuser(self, user: User) -> bool:
+        return user.is_superuser
+
 
 user_crud = CRUDAnswer(User)
 
 
 if __name__ == '__main__':
-    dict_ = {
-        'username': 'root',
-        'remark': 'root',
-        'password': '123456',
-        'state': 50
-    }
-    # a: User = user_crud.create(SessionLocal(), dict_)
-    a: User = user_crud.authenticate(SessionLocal(), 'root', '123456')
-    print(a.password)
+    a: User = user_crud.create(SessionLocal(), dict_)
+    # a: User = user_crud.authenticate(SessionLocal(), 'root', '123456')
+    # print(a.password)

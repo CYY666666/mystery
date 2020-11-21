@@ -1,10 +1,12 @@
 
 from flask import Blueprint, jsonify
+from flask_jwt_extended import fresh_jwt_required
 
 info_api = Blueprint('info', 'info')
 
 
 @info_api.route('', methods=['GET'])
+@fresh_jwt_required
 def get_info():
     data = {
         2: '形势与政策',
@@ -16,6 +18,7 @@ def get_info():
         15: '社会主义先进文化',
         16: '不忘初心',
         19: '70周年',
-        68: '学习四史'
+        68: '学习四史',
+        47: '新冠疫情'
     }
     return jsonify(data)

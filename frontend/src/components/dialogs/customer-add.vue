@@ -6,35 +6,35 @@
     :before-close="cancel"
     width="55%">
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="正确率" prop="accuracy" required>
-    <el-input v-model.number="form.accuracy"></el-input>
-  </el-form-item>
-  <el-form-item label="昵称" prop="remark">
-    <el-input v-model="form.remark"></el-input>
-  </el-form-item>
-  <el-form-item label="总分" prop="total_mark" required>
-    <el-input v-model.number="form.total_mark"></el-input>
-  </el-form-item>
-  <el-form-item label="url" prop="url" required>
-    <el-input v-model="form.url" type="textarea"></el-input>
-  </el-form-item>
-  <el-form-item label="科目" required>
-    <el-radio-group v-model="form.subject_id">
-      <el-radio
-        v-for="subject in subjects"
-        :label="subject.id"
-        :key="subject.id"
-        :value="subject.id"
-        style="width: 300px;">
-        {{ subject.name }}
-      </el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('form')" :disabled="lodding">立即创建</el-button>
-    <el-button @click="resetForm('form')">重置</el-button>
-  </el-form-item>
-</el-form>
+      <el-form-item label="正确率" prop="accuracy" required>
+        <el-input v-model.number="form.accuracy"></el-input>
+      </el-form-item>
+      <el-form-item label="昵称" prop="remark">
+        <el-input v-model="form.remark"></el-input>
+      </el-form-item>
+      <el-form-item label="总分" prop="total_mark" required>
+        <el-input v-model.number="form.total_mark"></el-input>
+      </el-form-item>
+      <el-form-item label="url" prop="url" required>
+        <el-input v-model="form.url" type="textarea"></el-input>
+      </el-form-item>
+      <el-form-item label="科目" required>
+        <el-radio-group v-model="form.subject_id">
+          <el-radio
+            v-for="subject in subjects"
+            :label="subject.id"
+            :key="subject.id"
+            :value="subject.id"
+            style="width: 300px;">
+            {{ subject.name }}
+          </el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('form')" :disabled="lodding">立即创建</el-button>
+        <el-button @click="resetForm('form')">重置</el-button>
+      </el-form-item>
+    </el-form>
   </el-dialog>
 </template>
 

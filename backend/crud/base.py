@@ -23,9 +23,11 @@ class CRUDBase:
         return db.query(self.model).filter(self.model.id == id).first()
 
     def get_multi(
-        self, db: Session, skip: int = 0, limit: int = 100
+        self, db: Session, skip: int = 0, limit: int = 100, q=None
     ) -> Any:
-        lst = db.query(self.model).order_by(
+        if q is None:
+            q = []
+        lst = db.query(self.model).filter(*q).order_by(
             self.model.create_at.desc()
         ).offset(skip).limit(limit).all()
         return json.dumps(lst, cls=AlchemyEncoder)
@@ -64,5 +66,7 @@ class CRUDBase:
         db.commit()
         return obj
 
-    def get_count(self, db: Session):
-        return db.query(self.model).count()
+    def get_count(self, db: Session, q=None):
+        if q is None:
+            q = []
+        return db.query(self.model).filter(*q).count()

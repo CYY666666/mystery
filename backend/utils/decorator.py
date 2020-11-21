@@ -1,5 +1,7 @@
 import functools
 
+from requests import Session
+
 from model import SessionLocal, engine, MySessionMaker
 
 

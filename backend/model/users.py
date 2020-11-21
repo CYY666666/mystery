@@ -1,5 +1,5 @@
 
-from sqlalchemy import Column, Integer, String, Text, Binary, BigInteger
+from sqlalchemy import Column, Integer, String, Text, Binary, BigInteger, Boolean
 
 from model import engine, Base
 from model.base import BaseModel
@@ -12,6 +12,7 @@ class User(Base, BaseModel):
     salt = Column(Binary)
     state = Column(Integer, index=True, default=50)
     last_login = Column(BigInteger, index=True, default=-1)
+    is_superuser = Column(Boolean, default=False)
 
     __tablename__ = 'users'
 

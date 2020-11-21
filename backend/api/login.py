@@ -3,6 +3,7 @@ from datetime import timedelta
 from typing import Any
 
 from flask import Blueprint, jsonify, request, abort
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 import config
 import crud
@@ -27,10 +28,11 @@ def login_access_token(db) -> Any:
         abort(400)
     elif not crud.user_crud.is_active(user):
         abort(400)
-    access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(identity=user.id, fresh=True, expires_delta=timedelta(
+        minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES))
+    refresh_token = create_refresh_token(user.id, expires_delta=timedelta(
+        minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES))
     return {
-        "access_token": security.create_access_token(
-            user.id, expires_delta=access_token_expires
-        ),
-        "token_type": "bearer",
+        "access_token": access_token,
+        "refresh_token": refresh_token,
     }

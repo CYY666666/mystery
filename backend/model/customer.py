@@ -14,6 +14,7 @@ class Customer(Base, BaseModel):
     total_mark = Column(Integer, index=True)
     got_mark = Column(Integer, index=True, default=0)
     accuracy = Column(Integer, index=True, default=80)
+    user_id = Column(Integer, index=True, nullable=True)
 
     __tablename__ = 'customer'
 

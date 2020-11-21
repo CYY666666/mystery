@@ -94,9 +94,13 @@ export default class Customer extends Vue {
   @Watch('change')
   async getAllCustomerData () {
     const skip = (this.currentPage - 1) * this.pageSize
-    const res = await getAllCustomer({ skip: skip, limit: this.pageSize })
-    this.customerList = (res as any).data.data.items as any
-    this.totalPage = Number((res as any).data.data.info.items_count)
+    try {
+      const res = await getAllCustomer({ skip: skip, limit: this.pageSize })
+      this.customerList = (res as any).data.data.items as any
+      this.totalPage = Number((res as any).data.data.info.items_count)
+    } catch (err) {
+      return this.$router.push({ name: 'Login' })
+    }
   }
 
   async added () {
