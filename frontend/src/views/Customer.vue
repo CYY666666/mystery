@@ -50,7 +50,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="20"
+      :page-size=pageSize
       layout="prev, pager, next, jumper"
       :total=totalPage>
     </el-pagination>
@@ -92,7 +92,7 @@ export default class Customer extends Vue {
     const skip = (this.currentPage - 1) * this.pageSize
     const res = await getAllCustomer({ skip: skip, limit: this.pageSize })
     this.customerList = (res as any).data.data.items as any
-    this.totalPage = (res as any).data.data.info.page_count
+    this.totalPage = Number((res as any).data.data.info.items_count)
   }
 
   async added () {
