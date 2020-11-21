@@ -26,7 +26,7 @@ class CRUDCustomer(CRUDBase):
         return db_obj.got_mark
 
     def get_by_url_subject_id(self, db: Session, url: str, subject_id: int):
-        return db.query(self.model).filter(self.model.url == url, self.subject_id == subject_id).first()
+        return db.query(self.model).filter(self.model.url == url, self.model.subject_id == subject_id).first()
 
 
 customer_crud = CRUDCustomer(Customer)
