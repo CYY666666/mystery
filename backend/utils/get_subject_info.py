@@ -1,6 +1,5 @@
 
-def get_subject_info(subject_id: int):
-    data = {
+subject_dict = {
         2: '形势与政策',
         7: '毛泽东思想和中国特色社会主义理论体系概论',
         8: '思想道德修养与法律基础',
@@ -9,6 +8,11 @@ def get_subject_info(subject_id: int):
         12: '学习新思想',
         15: '社会主义先进文化',
         16: '不忘初心',
-        19: '70周年'
+        19: '70周年',
+        68: '学习四史',
+        47: '新冠疫情'
     }
-    return data.get(subject_id, '')
+
+
+def get_subject_info(subject_id: int):
+    return subject_dict.get(subject_id, '')

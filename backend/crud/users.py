@@ -54,7 +54,4 @@ user_crud = CRUDAnswer(User)
 
 
 if __name__ == '__main__':
-    dict_ = {}
-    a: User = user_crud.create(SessionLocal(), dict_)
-    # a: User = user_crud.authenticate(SessionLocal(), 'root', '123456')
-    # print(a.password)
+    pass

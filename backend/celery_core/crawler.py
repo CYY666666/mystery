@@ -72,7 +72,7 @@ def crawler(db, customer_id: int):
                     choice = answer.choice
                 else:
                     choice = 'A'
-                if (now_ / total_tmp * 100) > accuracy + 5:
+                if (now_ / total_tmp * 100) > accuracy + 2:
                     choice = 'A'
                 response2 = requests.post(url=choice_url,
                                           data={'answer': choice, 'courseId': subject_id, 'uuid': uuid},

@@ -74,6 +74,11 @@ def list_customer(db):
         user: User = user_crud.get(db, user_id)
         q = [Customer.user_id == user_id] if not user_crud.is_superuser(user) else None
         data = customer_crud.get_multi(db, skip=skip, limit=limit, q=q)
+        data = json.loads(data)
+        for i in data:
+            create_user: User = user_crud.get(db, i['user_id'])
+            username = create_user.remark if create_user else None
+            i['username'] = username
         count = customer_crud.get_count(db, q)
         page_count = math.ceil(count / int(limit))
         return jsonify({
@@ -84,7 +89,7 @@ def list_customer(db):
                     'page_count': page_count,
                     'per_page': int(limit)
                 },
-                'items': json.loads(data)
+                'items': data
             }
         })
     except Exception as e:

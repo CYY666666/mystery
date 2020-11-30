@@ -37,6 +37,10 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="username"
+        label="创建者">
+      </el-table-column>
+      <el-table-column
         prop="accuracy"
         label="正确率">
       </el-table-column>
