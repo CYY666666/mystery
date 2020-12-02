@@ -97,14 +97,16 @@ export default class DialogCustomerAdd extends Vue {
   }
 
   async newCustomer () {
-    const res = await insertCustomer(this.form)
-    if ((res as any).status === 200) {
-      this.$message({
-        message: '添加成功',
-        type: 'success'
-      })
-      this.$emit('added')
-    } else {
+    try {
+      const res = await insertCustomer(this.form)
+      if ((res as any).status === 200) {
+        this.$message({
+          message: '添加成功',
+          type: 'success'
+        })
+        this.$emit('added')
+      }
+    } catch (err) {
       this.$message.error({
         message: 'url重复'
       })
