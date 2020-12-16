@@ -24,3 +24,7 @@ vine==5.0.0
 wcwidth==0.2.5
 Werkzeug==1.0.1
 wincertstore==0.2
+flask_jwt_extended
+passlib
+python-jose
+bcrypt

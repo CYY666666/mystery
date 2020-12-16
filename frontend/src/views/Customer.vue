@@ -4,12 +4,15 @@
     <el-button type="primary" style="float:left" @click="addCustomer">添加<i class="el-icon-circle-plus-outline"></i></el-button>
     <el-button type="primary" style="float:left" @click="continueTask">继续<i class="el-icon-arrow-right"></i></el-button>
     <el-button type="primary" style="float:right" @click="resetPassword">修改密码<i class="el-icon-setting"></i></el-button>
+    <el-button type="primary" style="float:right" @click="calculateTotalMark">计算总分<i class="el-icon-s-data"></i></el-button>
     <el-table
       :data="customerList"
       style="width: 100%"
+      :row-key="getRowKey"
       @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
+        :reserve-selection="true"
         width="55">
       </el-table-column>
       <el-table-column
@@ -115,6 +118,10 @@ export default class Customer extends Vue {
     await this.getAllCustomerData()
   }
 
+  getRowKey (row: any) {
+    return row.id
+  }
+
   handleSizeChange (val: number) {
     console.log(`每页 ${val} 条`)
   }
@@ -127,6 +134,19 @@ export default class Customer extends Vue {
   dateFormat (row: any, column: any) {
     const date = row[column.property] * 1000
     return dayjs(date).format('YYYY-MM-DD HH:mm')
+  }
+
+  calculateTotalMark () {
+    if (!this.multipleSelection.length) {
+      this.$message.warning({
+        message: '未选中'
+      })
+      return
+    }
+    this.$message.success({
+      message: '一共' + this.multipleSelection.reduce((totalMark: number, item: any) => totalMark + item.total_mark, 0) + '分'
+    })
+    return this.multipleSelection.reduce((totalMark: number, item: any) => totalMark + item.total_mark, 0)
   }
 
   addCustomer () {
