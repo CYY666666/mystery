@@ -7,6 +7,8 @@ from flask_jwt_extended import create_access_token, create_refresh_token, get_jw
 
 import config
 import crud
+from crud import user_crud
+from model.users import User
 from utils import security
 from utils.decorator import get_db
 
@@ -23,3 +25,15 @@ def reset_password(db) -> Any:
         db, user_id=get_jwt_identity(), password=json_data.get('password')
     )
     return "success"
+
+
+@user_api.route("/get_users", methods=['GET'])
+@fresh_jwt_required
+@get_db
+def get_users(db) -> Any:
+    user_id = get_jwt_identity()
+    user: User = user_crud.get(db, user_id)
+    q = [User.id == user_id] if not user_crud.is_superuser(user) else None
+    data = user_crud.get_multi(db, skip=0, limit=100, q=q)
+    data = json.loads(data)
+    return {'data': data}

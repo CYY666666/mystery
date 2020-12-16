@@ -5,6 +5,14 @@
     <el-button type="primary" style="float:left" @click="continueTask">继续<i class="el-icon-arrow-right"></i></el-button>
     <el-button type="primary" style="float:right" @click="resetPassword">修改密码<i class="el-icon-setting"></i></el-button>
     <el-button type="primary" style="float:right" @click="calculateTotalMark">计算总分<i class="el-icon-s-data"></i></el-button>
+    <el-select v-model="currentUserId" placeholder="只看">
+      <el-option
+        v-for="user in users"
+        :key="user.id"
+        :label="user.username"
+        :value="user.id">
+      </el-option>
+    </el-select>
     <el-table
       :data="customerList"
       style="width: 100%"
@@ -78,6 +86,7 @@ import MenuAside from '../components/menu.vue'
 import pagination from '../components/pagination.vue'
 import { getAllCustomer, restartTask } from '../api/http/customerApi'
 import { getInfo } from '../api/http/infoApi'
+import { getAllUsersApi } from '../api/http/userApi'
 import DialogCustomerAdd from '@/components/dialogs/customer-add.vue'
 import DialogPasswordReset from '@/components/dialogs/reset-password.vue'
 import dayjs from 'dayjs'
@@ -100,13 +109,17 @@ export default class Customer extends Vue {
   subjectInfo = {}
   timer: any = null
   multipleSelection = []
+  users = []
+  currentUserId = null
 
   @Watch('currentPage')
   @Watch('change')
+  @Watch('currentUserId')
   async getAllCustomerData () {
     const skip = (this.currentPage - 1) * this.pageSize
     try {
-      const res = await getAllCustomer({ skip: skip, limit: this.pageSize })
+      // eslint-disable-next-line quote-props
+      const res = await getAllCustomer({ skip: skip, limit: this.pageSize, 'user_id': this.currentUserId })
       this.customerList = (res as any).data.data.items as any
       this.totalPage = Number((res as any).data.data.info.items_count)
     } catch (err) {
@@ -128,7 +141,6 @@ export default class Customer extends Vue {
 
   handleCurrentChange (val: number) {
     this.currentPage = val
-    this.getAllCustomerData()
   }
 
   dateFormat (row: any, column: any) {
@@ -198,6 +210,11 @@ export default class Customer extends Vue {
     this.subjectInfo = (res as any).data
   }
 
+  async getAllUsers () {
+    const res = await getAllUsersApi()
+    this.users = (res as any).data.data
+  }
+
   async intervalGetData () {
     this.timer = setInterval(async () => {
       await this.getAllCustomerData()
@@ -223,6 +240,7 @@ export default class Customer extends Vue {
     await this.getAllCustomerData()
     await this.getSubjectInfo()
     await this.intervalGetData()
+    await this.getAllUsers()
   }
 }
 </script>

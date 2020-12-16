@@ -69,10 +69,12 @@ def restart_task(db):
 def list_customer(db):
     skip = request.args.get('skip', 0)
     limit = request.args.get('limit', 20)
+    user_id_param = request.args.get('user_id', None)
     try:
         user_id = get_jwt_identity()
         user: User = user_crud.get(db, user_id)
-        q = [Customer.user_id == user_id] if not user_crud.is_superuser(user) else None
+        q = [Customer.user_id == user_id] if not user_crud.is_superuser(user) else \
+            [Customer.user_id == user_id_param] if user_id_param else None
         data = customer_crud.get_multi(db, skip=skip, limit=limit, q=q)
         data = json.loads(data)
         for i in data:
