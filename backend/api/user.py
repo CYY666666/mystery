@@ -37,3 +37,13 @@ def get_users(db) -> Any:
     data = user_crud.get_multi(db, skip=0, limit=100, q=q)
     data = json.loads(data)
     return {'data': data}
+
+
+@user_api.route("/info", methods=['GET'])
+@fresh_jwt_required
+@get_db
+def user_info(db) -> Any:
+    user_id = get_jwt_identity()
+    data = user_crud.get(db, user_id)
+    data = json.loads(data)
+    return {'data': data}

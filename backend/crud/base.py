@@ -1,4 +1,5 @@
 import json
+import time
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from sqlalchemy.orm import Session
@@ -70,3 +71,14 @@ class CRUDBase:
         if q is None:
             q = []
         return db.query(self.model).filter(*q).count()
+
+    def delete(self, db: Session, *, id: int) -> Any:
+        obj = db.query(self.model).get(id)
+        obj.delete_at = int(time.time())
+        db.commit()
+        return obj
+
+    def delete_multi(self, db: Session, *, id_list: List[int]) -> Any:
+        obj = db.query(self.model).filter(self.model.id.in_(id_list)).update({'delete_at': int(time.time())})
+        db.commit()
+        return obj

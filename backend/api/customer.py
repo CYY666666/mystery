@@ -97,3 +97,20 @@ def list_customer(db):
     except Exception as e:
         traceback.print_exc()
         abort(400)
+
+
+@customer_api.route('', methods=['DELETE'])
+@get_db
+@fresh_jwt_required
+def delete_customer(db):
+    data = request.get_data(as_text=True)
+    try:
+        json_data = json.loads(data)
+        id_list = json_data.get('id_list', [])
+        customer_crud.delete_multi(db, id_list)
+        return jsonify({
+            'code': 0
+        })
+    except Exception as e:
+        traceback.print_exc()
+        abort(400)

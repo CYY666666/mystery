@@ -13,6 +13,8 @@ class User(Base, BaseModel):
     state = Column(Integer, index=True, default=50)
     last_login = Column(BigInteger, index=True, default=-1)
     is_superuser = Column(Boolean, default=False)
+    open_id = Column(String(32), index=True)
+    session_key = Column(String(32), index=True)
 
     __tablename__ = 'users'
 
